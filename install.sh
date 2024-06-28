@@ -25,7 +25,7 @@ docker volume create postgres_vol
 docker network create app_net
 
 # Run container for Portainer
-docker run --rm -d \
+docker run -d \
   --name portainer \
   --net=app_net \
   -p 9000:9000 \
@@ -33,7 +33,7 @@ docker run --rm -d \
   portainer/portainer
 
 # Run container for Portainer agent
-docker run --rm -d \
+docker run -d \
   --name portainer_agent \
   --net=app_net \
   -p 9001:9001 \
@@ -43,7 +43,7 @@ docker run --rm -d \
   portainer/agent
 
 # Run container for Postgres
-docker run --rm -d \
+docker run -d \
   --name postgres \
   --net=app_net \
   -e POSTGRES_HOST_AUTH_METHOD=trust \
@@ -52,26 +52,31 @@ docker run --rm -d \
   -e POSTGRES_DB=test_db \
   -p 5432:5432 \
   -v postgres_vol:/var/lib/postgresql/data \
-  postgres:16
+  postgres
 
 # Run container for Superset
-docker run --rm -d \
-  --name superset \
-  -e "SUPERSET_SECRET_KEY=H0gPQm5MLuFb45ABSv/W1o1kQNBHH9elbjhc515Uqc+C5WgPNidKtzlQ" \
-  -p 8080:8088 \
-  apache/superset \
-docker exec -it superset superset fab create-admin \
-  --username admin \
-  --firstname Superset \
-  --lastname Admin \
-  --email superset@example.com \
-  --password admin
-docker exec -it superset superset db upgrade
-# docker exec -it superset superset load_examples
-docker exec -it superset superset init
+#docker run -d \
+#  --name superset \
+#  -e "SUPERSET_SECRET_KEY=H0gPQm5MLuFb45ABSv/W1o1kQNBHH9elbjhc515Uqc+C5WgPNidKtzlQ" \
+#  -p 8080:8088 \
+#  apache/superset \
+#docker exec -it superset superset fab create-admin \
+#  --username admin \
+#  --firstname Superset \
+#  --lastname Admin \
+#  --email superset@example.com \
+#  --password admin
+#docker exec -it superset superset db upgrade
+## docker exec -it superset superset load_examples
+#docker exec -it superset superset init
+
+# Run Superset with docker
+git clone https://github.com/apache/superset.git
+cd superset
+docker compose -f docker-compose-non-dev.yml up
 
 # Run container for clickhouse
-# docker run --rm -d \
+# docker run -d \
 #  --name clickhouse \
 #  --net=app_net \
 #  -v clickhouse_vol:/var/lib/clickhouse \P
