@@ -6,8 +6,7 @@ apt-get install -y \
   curl \
   gnupg-agent \
   software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-add-apt-repository \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -add-apt-repository \
   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) \
   stable"
@@ -37,8 +36,12 @@ docker run -d \
   -p 9001:9001 \
   -v portainer_vol:/data \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /var/lib/docker/volumes:/var/lib/docker/volumes
+  -v /var/lib/docker/volumes:/var/lib/docker/volumes \
   portainer/agent
+
+# Preference for environment:
+# Name: Docker
+# Environment address: portainer_agent:9001
 
 # Run container for Postgres
 docker run -d \
@@ -77,7 +80,7 @@ docker compose -f docker-compose-non-dev.yml up
 # docker run -d \
 #  --name clickhouse \
 #  --net=app_net \
-#  -v clickhouse_vol:/var/lib/clickhouse \P
+#  -v clickhouse_vol:/var/lib/clickhouse \
 #  clickhouse/clickhouse-server
 
 # Superset-clickhouse
